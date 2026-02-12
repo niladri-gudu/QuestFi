@@ -1,0 +1,6 @@
+{
+  "network": "sepolia",
+  "contractAddress": "0x9aAF0B75EA1EB7977ce245cF1d6733fd27eeA771",
+  "methodSelector": "0xa9059cbb",
+  "minValue": "0"
+}

@@ -1,0 +1,4 @@
+export const CONTRACT_ADDRESSES = {
+  BadgeSBT: "0x71c70de08D6290819c2aC005F1Cba24a1F340001",
+  QuestRegistry: "0x9aAF0B75EA1EB7977ce245cF1d6733fd27eeA771",
+} as const;
