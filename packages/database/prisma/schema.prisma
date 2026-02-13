@@ -27,7 +27,7 @@ model User {
 }
 
 model Quest {
-  id               Int               @id @default(autoincrement())
+  id               Int               @id
   title            String
   description      String
   metadataHash     String
