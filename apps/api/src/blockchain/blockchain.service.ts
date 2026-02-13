@@ -40,7 +40,10 @@ export class BlockchainService {
       args: [metadataHash, questType, BigInt(endTime)],
     });
 
-    const receipt = await this.publicClient.waitForTransactionReceipt({ hash });
+    const receipt = await this.publicClient.waitForTransactionReceipt({
+      hash,
+      timeout: 60_000,
+    });
 
     for (const log of receipt.logs) {
       try {
@@ -161,7 +164,10 @@ export class BlockchainService {
       args: [userAddress as `0x${string}`, tokenURI],
     });
 
-    const receipt = await this.publicClient.waitForTransactionReceipt({ hash });
+    const receipt = await this.publicClient.waitForTransactionReceipt({
+      hash,
+      timeout: 60_000,
+    });
 
     for (const log of receipt.logs) {
       try {

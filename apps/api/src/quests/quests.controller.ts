@@ -6,16 +6,19 @@ import {
   Param,
   ParseIntPipe,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import { QuestsService } from './quests.service';
 import { CreateQuestDto } from './dto/create-quest.dto';
 import { SubmitQuestDto } from './dto/submit-quest.dto';
+import { AdminGuard } from '../auth/guards/admin.guards';
 
 @Controller('quests')
 export class QuestsController {
   constructor(private readonly questsService: QuestsService) {}
 
   @Post()
+  @UseGuards(AdminGuard)
   async createQuest(@Body() body: CreateQuestDto) {
     return this.questsService.createQuest(body);
   }

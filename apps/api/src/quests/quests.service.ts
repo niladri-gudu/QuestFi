@@ -11,6 +11,8 @@ import { normalizeWallet } from '../users/utils/wallet.util';
 import { IpfsService } from '../ipfs/ipfs.service';
 import { BlockchainService } from '../blockchain/blockchain.service';
 import { CONTRACT_ADDRESSES } from '@repo/contract-types';
+import { InjectQueue } from '@nestjs/bullmq';
+import { Queue } from 'bullmq';
 
 @Injectable()
 export class QuestsService {
@@ -18,6 +20,9 @@ export class QuestsService {
     private readonly prisma: PrismaService,
     private readonly ipfsService: IpfsService,
     private readonly blockchainService: BlockchainService,
+
+    @InjectQueue('badge-mint')
+    private badgeQueue: Queue,
   ) {}
 
   async createQuest(data: CreateQuestDto) {

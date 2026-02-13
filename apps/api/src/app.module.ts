@@ -8,6 +8,7 @@ import { QuestsController } from './quests/quests.controller';
 import { QuestsModule } from './quests/quests.module';
 import { IpfsModule } from './ipfs/ipfs.module';
 import { BlockchainModule } from './blockchain/blockchain.module';
+import { QueueModule } from './queue/queue.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { BlockchainModule } from './blockchain/blockchain.module';
     QuestsModule,
     IpfsModule,
     BlockchainModule,
+    QueueModule,
   ],
   controllers: [AppController, QuestsController],
   providers: [AppService, QuestsService],
