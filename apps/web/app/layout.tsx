@@ -1,7 +1,11 @@
-import "@repo/ui/styles.css";
-import "./globals.css";
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
+import "./globals.css";
+import "@rainbow-me/rainbowkit/styles.css";
+import { Providers } from "./providers";
+
+import "dotenv/config";
+import Navbar from "../components/layout/Navbar";
 
 const geist = Geist({ subsets: ["latin"] });
 
@@ -17,7 +21,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={geist.className}>{children}</body>
+      <body className={geist.className}>
+        <Providers>
+          <Navbar />
+          <main className="mx-auto max-w-6xl px-6 py-8">{children}</main>
+        </Providers>
+      </body>
     </html>
   );
 }

@@ -10,7 +10,6 @@ import { BadRequestException } from '@nestjs/common';
 import { normalizeWallet } from '../users/utils/wallet.util';
 import { IpfsService } from '../ipfs/ipfs.service';
 import { BlockchainService } from '../blockchain/blockchain.service';
-import { CONTRACT_ADDRESSES } from '@repo/contract-types';
 import { InjectQueue } from '@nestjs/bullmq';
 import { Queue } from 'bullmq';
 
@@ -177,32 +176,27 @@ export class QuestsService {
     // ---------------------------
     if (isValid) {
       try {
-        const badgeMetadata = {
-          name: `Quest ${quest.title}`,
-          description: `Awarded for completing ${quest.title}`,
-          image: quest.imageUrl ?? '',
-        };
-
-        const badgeCid = await this.ipfsService.uploadJson(badgeMetadata);
-        const tokenURI = `ipfs://${badgeCid}`;
-
-        const tokenId = await this.blockchainService.mintBadgeOnChain(
-          normalizedWallet,
-          tokenURI,
+        await this.badgeQueue.add(
+          'mint-badge',
+          {
+            userId: result.userId,
+            wallet: normalizedWallet,
+            questId,
+            questTitle: quest.title,
+            imageUrl: quest.imageUrl,
+          },
+          {
+            attempts: 5,
+            backoff: {
+              type: 'exponential',
+              delay: 1000,
+            },
+          },
         );
 
-        await this.prisma.badge.create({
-          data: {
-            userId: result.userId,
-            questId,
-            tokenId,
-            contractAddr: CONTRACT_ADDRESSES.BadgeSBT,
-            name: badgeMetadata.name,
-            imageUrl: badgeMetadata.image,
-          },
-        });
+        console.log('📦 Badge mint job queued');
       } catch (error) {
-        console.error('⚠️ Badge mint failed:', error);
+        console.error('⚠️ Failed to queue badge job:', error);
       }
     }
 
