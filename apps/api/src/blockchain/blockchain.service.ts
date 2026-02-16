@@ -112,11 +112,6 @@ export class BlockchainService {
       return false;
     }
 
-    if (!tx.input.startsWith(metadata.methodSelector)) {
-      console.log('❌ Method selector mismatch');
-      return false;
-    }
-
     const txValue = BigInt(tx.value);
     const minValue = BigInt(metadata.minValue);
 

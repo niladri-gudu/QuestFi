@@ -55,11 +55,43 @@ export class QuestsService {
     });
   }
 
-  async getActiveQuests() {
-    return await this.prisma.quest.findMany({
+  async getActiveQuests(wallet?: string) {
+    const quests = await this.prisma.quest.findMany({
       where: { isActive: true },
       orderBy: { createdAt: 'desc' },
     });
+
+    if (!wallet) {
+      return quests.map((q) => ({
+        ...q,
+        completed: false,
+      }));
+    }
+
+    const normalized = normalizeWallet(wallet);
+
+    const user = await this.prisma.user.findUnique({
+      where: { walletAddress: normalized },
+      include: {
+        completions: {
+          select: { questId: true },
+        },
+      },
+    });
+
+    if (!user) {
+      return quests.map((q) => ({
+        ...q,
+        completed: false,
+      }));
+    }
+
+    const completedIds = new Set(user.completions.map((c) => c.questId));
+
+    return quests.map((q) => ({
+      ...q,
+      completed: completedIds.has(q.id),
+    }));
   }
 
   async submitQuest(questId: number, body: SubmitQuestDto) {

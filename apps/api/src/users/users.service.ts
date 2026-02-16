@@ -34,12 +34,22 @@ export class UsersService {
         badges: true,
       },
     });
+    const higherXpCount = await this.prisma.user.count({
+      where: {
+        totalXP: {
+          gt: user.totalXP,
+        },
+      },
+    });
+
+    const rank = higherXpCount + 1;
 
     return {
       wallet: user.walletAddress,
       username: user.username,
       totalXP: user.totalXP,
       completedQuests: user.completions.length,
+      rank: rank,
       badges: user.badges,
     };
   }

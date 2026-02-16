@@ -6,6 +6,7 @@ import {
   Param,
   ParseIntPipe,
   Post,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { QuestsService } from './quests.service';
@@ -23,9 +24,9 @@ export class QuestsController {
     return this.questsService.createQuest(body);
   }
 
-  @Get()
-  async getActiveQuests() {
-    return this.questsService.getActiveQuests();
+  @Get('/active')
+  async getActiveQuests(@Query('wallet') wallet?: string) {
+    return this.questsService.getActiveQuests(wallet);
   }
 
   @Post(':id/submit')
