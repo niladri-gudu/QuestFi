@@ -9,5 +9,7 @@ export function useProfile(wallet?: string) {
       const res = await fetch(`${API_URL}/users/${wallet}`);
       return res.json();
     },
+
+    refetchInterval: 10000,
   });
 }

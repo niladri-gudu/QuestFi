@@ -3,6 +3,7 @@ import { Geist } from "next/font/google";
 import "./globals.css";
 import "@rainbow-me/rainbowkit/styles.css";
 import { Providers } from "./providers";
+import { Toaster } from "sonner";
 
 import "dotenv/config";
 import Navbar from "../components/layout/Navbar";
@@ -26,6 +27,7 @@ export default function RootLayout({
           <Navbar />
           <main className="mx-auto max-w-6xl px-6 py-8">{children}</main>
         </Providers>
+        <Toaster richColors position="top-right" />
       </body>
     </html>
   );

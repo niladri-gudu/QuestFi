@@ -1,34 +1,54 @@
 "use client";
 
-import { useQuests } from "../../hooks/useQuests";
+import { useActiveQuests } from "../../hooks/useActiveQuests";
+import { useConnection } from "wagmi";
 import QuestCard from "./QuestCard";
 
 export default function QuestList() {
-  const { data, isLoading, error } = useQuests();
+  const { address } = useConnection();
+  const { data, isLoading, error } = useActiveQuests(address as string);
 
   if (isLoading) return <Skeleton />;
-
   if (error) return <ErrorBox />;
 
-  const activeQuests = data?.filter((q: any) => q.isActive);
+  const active = data?.filter((q) => !q.completed);
+  const completed = data?.filter((q) => q.completed);
 
-  if (!activeQuests?.length) {
+  if (!data?.length) {
     return (
       <div className="rounded-xl border border-zinc-800 bg-zinc-900 p-6 text-center text-zinc-400">
-        No active quests yet 🚀
+        No quests yet 🚀
       </div>
     );
   }
 
   return (
     <section className="space-y-4">
-      <h2 className="text-xl font-semibold text-white">🔥 Active Quests</h2>
+      {active?.length > 0 && (
+        <>
+          <h2 className="text-xl font-semibold text-white pt-6">🔥 Active Quests</h2>
 
-      <div className="grid gap-4 md:grid-cols-2">
-        {data.map((quest: any) => (
-          <QuestCard key={quest.id} quest={quest} />
-        ))}
-      </div>
+          <div className="grid gap-4 md:grid-cols-2">
+            {active.map((quest: any) => (
+              <QuestCard key={quest.id} quest={quest} completed={false} />
+            ))}
+          </div>
+        </>
+      )}
+
+      {completed?.length > 0 && (
+        <>
+          <h2 className="text-xl font-semibold text-emerald-400 pt-6">
+            ✅ Completed
+          </h2>
+
+          <div className="grid gap-4 md:grid-cols-2 opacity-80">
+            {completed.map((quest: any) => (
+              <QuestCard key={quest.id} quest={quest} completed />
+            ))}
+          </div>
+        </>
+      )}
     </section>
   );
 }
