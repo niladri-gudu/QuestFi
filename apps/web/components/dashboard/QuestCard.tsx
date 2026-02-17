@@ -1,15 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { CheckCircle2 } from "lucide-react";
 import CompleteButton from "../CompleteButton";
+import { useEffect, useState } from "react";
 
-export default function QuestCard({
-  quest,
-  completed,
-}: {
-  quest: any;
-  completed: boolean;
-}) {
+export default function QuestCard({ quest, completed }: { quest: any; completed: boolean }) {
   const [metadata, setMetadata] = useState<any>(null);
 
   useEffect(() => {
@@ -26,34 +21,39 @@ export default function QuestCard({
 
     load();
   }, [quest.metadataHash]);
-
   return (
     <div
-      className={`rounded-2xl border p-5 transition ${
+      className={`group relative overflow-hidden rounded-xl border p-5 transition-all duration-300 ${
         completed
-          ? "border-emerald-500/40 bg-emerald-500/5"
-          : "border-zinc-800 bg-zinc-900 hover:border-emerald-500/40"
+          ? "border-emerald-500/30 bg-emerald-500/5"
+          : "border-zinc-800 bg-zinc-900/40 hover:border-zinc-700"
       }`}
     >
-      <div className="flex items-start justify-between">
-        <div>
-          <h3 className="text-lg font-semibold text-white">{quest.title}</h3>
-          <p className="mt-1 text-sm text-zinc-400">{quest.description}</p>
+      {/* Top Section: Title on left, XP on right */}
+      <div className="flex justify-between items-start">
+        <div className="space-y-1">
+          <h3 className="text-base font-bold text-white group-hover:text-emerald-400 transition-colors">
+            {quest.title}
+          </h3>
+          <p className="text-xs text-zinc-500 leading-relaxed max-w-[250px]">
+            {quest.description}
+          </p>
         </div>
 
-        <div className="rounded-lg bg-emerald-500/10 px-3 py-1 text-sm text-emerald-400 border border-emerald-500/30">
+        <span className="text-[10px] font-bold text-emerald-400 whitespace-nowrap bg-emerald-500/10 px-2 py-1 rounded-md border border-emerald-500/20">
           +{quest.xpReward} XP
-        </div>
+        </span>
       </div>
 
-      {/* Bottom */}
-      <div className="mt-5 flex items-center justify-between">
+      {/* Bottom Section: Type Badge on left, Start/Complete Button on right */}
+      <div className="mt-6 flex items-center justify-between border-t border-zinc-800/50 pt-4">
         <QuestTypeBadge type={quest.type} />
 
         {completed ? (
-          <span className="text-sm font-semibold text-emerald-400">
-            Completed ✅
-          </span>
+          <div className="flex items-center gap-1.5 text-xs font-bold text-emerald-400 uppercase tracking-widest">
+            <CheckCircle2 size={14} />
+            <span>Complete</span>
+          </div>
         ) : (
           <CompleteButton questId={quest.id} metadata={metadata} />
         )}
@@ -63,19 +63,17 @@ export default function QuestCard({
 }
 
 function QuestTypeBadge({ type }: { type: string }) {
-  const colors: Record<string, string> = {
-    TX: "text-blue-400 border-blue-400/30 bg-blue-400/10",
-    SIGN: "text-violet-400 border-violet-400/30 bg-violet-400/10",
-    MULTI: "text-orange-400 border-orange-400/30 bg-orange-400/10",
+  const styles: any = {
+    TX: "bg-blue-500/10 text-blue-400 border-blue-400/20",
+    SIGN: "bg-violet-500/10 text-violet-400 border-violet-400/20",
+    MULTI: "bg-orange-500/10 text-orange-400 border-orange-400/30",
   };
 
   return (
-    <div
-      className={`rounded-md border px-2 py-1 text-xs font-medium ${
-        colors[type] || "text-zinc-400 border-zinc-700"
-      }`}
+    <span
+      className={`rounded px-1.5 py-0.5 text-[10px] font-black border uppercase ${styles[type] || "border-zinc-800 text-zinc-500"}`}
     >
       {type}
-    </div>
+    </span>
   );
 }

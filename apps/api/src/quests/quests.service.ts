@@ -130,19 +130,44 @@ export class QuestsService {
     // ---------------------------
     // 3️⃣ Verify TX
     // ---------------------------
-    if (!body.txHash) {
-      throw new BadRequestException(
-        'Transaction hash is required for quest submission',
-      );
-    }
-
     const metadata = await this.ipfsService.fetchJson(quest.metadataHash);
 
-    const isValid = await this.blockchainService.verifySepoliaTransaction(
-      body.txHash,
-      normalizedWallet,
-      metadata,
-    );
+    let isValid = false;
+
+    switch (quest.type) {
+      case 'TX': {
+        if (!body.txHash) {
+          throw new BadRequestException('TX quest requires transaction');
+        }
+
+        isValid = await this.blockchainService.verifySepoliaTransaction(
+          body.txHash,
+          normalizedWallet,
+          metadata,
+        );
+        break;
+      }
+
+      case 'SIGN': {
+        if (!body.signature) {
+          throw new BadRequestException('SIGN quest requires signature');
+        }
+
+        if (!metadata.message) {
+          throw new BadRequestException('Invalid SIGN quest metadata');
+        }
+
+        isValid = await this.blockchainService.verifySignature(
+          normalizedWallet,
+          body.signature,
+          metadata.message,
+        );
+        break;
+      }
+
+      default:
+        throw new BadRequestException('Unsupported quest type');
+    }
 
     // ---------------------------
     // 4️⃣ FAST DB TRANSACTION
@@ -176,6 +201,7 @@ export class QuestsService {
           userId: user.id,
           questId,
           txHash: body.txHash,
+          signature: body.signature,
           status,
         },
       });

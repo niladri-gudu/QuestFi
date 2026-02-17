@@ -5,42 +5,62 @@ import { useConnection, usePublicClient, useSendTransaction } from "wagmi";
 import { toast } from "sonner";
 import { API_URL } from "../lib/api";
 import { useQueryClient } from "@tanstack/react-query";
+import { useSignMessage } from "wagmi";
 
 type Metadata = {
-  contractAddress: string;
-  minValue: string;
+  contractAddress?: string;
+  minValue?: string;
+  message?: string;
 };
 
 export function useSubmitQuest() {
   const { address } = useConnection();
   const publicClient = usePublicClient();
-  const { mutateAsync } = useSendTransaction();
+  const { mutateAsync: sendTx } = useSendTransaction();
+  const { mutateAsync: signMessage } = useSignMessage();
   const [loading, setLoading] = useState(false);
   const queryClient = useQueryClient();
 
   const submitQuest = async (questId: string, metadata: Metadata) => {
     if (!address) throw new Error("Wallet not connected");
-    if (!publicClient) throw new Error("Public client not ready");
-
-    if (!metadata?.contractAddress || !metadata?.minValue) {
-      throw new Error("Invalid quest metadata");
-    }
 
     const toastId = toast.loading("Sending transaction...");
+
+    if (
+      !metadata?.message &&
+      !(metadata?.contractAddress && metadata?.minValue)
+    ) {
+      throw new Error("Invalid quest metadata");
+    }
 
     try {
       setLoading(true);
 
-      const hash = await mutateAsync({
-        to: metadata.contractAddress as `0x${string}`,
-        value: BigInt(metadata.minValue),
-      });
+      let txHash: string | undefined;
+      let signature: string | undefined;
 
-      console.log("TX Hash:", hash);
+      if (metadata.contractAddress && metadata.minValue) {
+        if (!publicClient) throw new Error("Public client not ready");
 
-      toast.loading("Waiting for confirmation ⛏️", { id: toastId });
+        toast.loading("Sending transaction...", { id: toastId });
 
-      await publicClient.waitForTransactionReceipt({ hash });
+        txHash = await sendTx({
+          to: metadata.contractAddress as `0x${string}`,
+          value: BigInt(metadata.minValue),
+        });
+
+        toast.loading("Waiting for confirmation ⛏️", { id: toastId });
+
+        await publicClient.waitForTransactionReceipt({ hash: txHash });
+      }
+
+      if (metadata.message) {
+        toast.loading("Signing message...", { id: toastId });
+
+        signature = await signMessage({
+          message: metadata.message,
+        });
+      }
 
       toast.loading("Verifying quest...", { id: toastId });
 
@@ -49,7 +69,8 @@ export function useSubmitQuest() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           wallet: address,
-          txHash: hash,
+          txHash,
+          signature,
         }),
       });
 

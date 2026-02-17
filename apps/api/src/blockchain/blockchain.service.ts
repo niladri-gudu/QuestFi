@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { Injectable } from '@nestjs/common';
-import { createWalletClient, createPublicClient, http } from 'viem';
+import { createWalletClient, createPublicClient, http, verifyMessage } from 'viem';
 import { privateKeyToAccount } from 'viem/accounts';
 import { sepolia } from 'viem/chains';
 import { decodeEventLog } from 'viem';
@@ -185,5 +185,24 @@ export class BlockchainService {
     }
 
     throw new Error('BadgeMinted event not found');
+  }
+
+  async verifySignature(
+    wallet: string,
+    signature: string,
+    message: string,
+  ): Promise<boolean> {
+    try {
+      const valid = await verifyMessage({
+        address: wallet as `0x${string}`,
+        message,
+        signature: signature as `0x${string}`,
+      });
+
+      return valid;
+    } catch (error) {
+      console.error('Signature verification failed:', error);
+      return false;
+    }
   }
 }
