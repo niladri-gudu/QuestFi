@@ -26,7 +26,6 @@ export class IpfsService {
       'https://cloudflare-ipfs.com/ipfs/',
       'https://ipfs.io/ipfs/',
       'https://dweb.link/ipfs/',
-      'https://gateway.pinata.cloud/ipfs/',
       'https://ipfs.fleek.co/ipfs/',
     ];
 
