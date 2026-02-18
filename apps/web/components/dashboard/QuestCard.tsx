@@ -11,7 +11,7 @@ export default function QuestCard({ quest, completed }: { quest: any; completed:
     const load = async () => {
       try {
         const hash = quest.metadataHash.replace("ipfs://", "");
-        const res = await fetch(`https://gateway.pinata.cloud/ipfs/${hash}`);
+        const res = await fetch(`https://ipfs.io/ipfs/${hash}`);
         const json = await res.json();
         setMetadata(json);
       } catch (err) {
