@@ -29,7 +29,6 @@ export default function QuestCard({ quest, completed }: { quest: any; completed:
           : "border-zinc-800 bg-zinc-900/40 hover:border-zinc-700"
       }`}
     >
-      {/* Top Section: Title on left, XP on right */}
       <div className="flex justify-between items-start">
         <div className="space-y-1">
           <h3 className="text-base font-bold text-white group-hover:text-emerald-400 transition-colors">
@@ -45,7 +44,6 @@ export default function QuestCard({ quest, completed }: { quest: any; completed:
         </span>
       </div>
 
-      {/* Bottom Section: Type Badge on left, Start/Complete Button on right */}
       <div className="mt-6 flex items-center justify-between border-t border-zinc-800/50 pt-4">
         <QuestTypeBadge type={quest.type} />
 

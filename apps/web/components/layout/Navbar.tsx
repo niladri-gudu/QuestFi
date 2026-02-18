@@ -1,7 +1,7 @@
 "use client";
 
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-import { useAccount } from "wagmi"; // Use useAccount for wallet status
+import { useConnection } from "wagmi";
 import { useProfile } from "../../hooks/useProfile";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -9,8 +9,11 @@ import { Terminal } from "lucide-react";
 import { isAdmin } from "../../lib/admin";
 
 export default function Navbar() {
-  const { address, isConnected } = useAccount();
-  const { data } = useProfile(address);
+  const { address, isConnected } = useConnection();
+
+  // Safe profile fetch (won't run when disconnected)
+  const { data } = useProfile(isConnected ? address : undefined);
+
   const pathname = usePathname();
 
   const navItem = (href: string, label: string) => {
@@ -34,6 +37,8 @@ export default function Navbar() {
   return (
     <nav className="sticky top-0 z-50 w-full border-b border-zinc-800 bg-zinc-950/70 backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
+        
+        {/* LEFT — Logo */}
         <div className="flex items-center gap-2">
           <Link href="/" className="flex items-center gap-2.5 group">
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-500 text-black shadow-[0_0_15px_rgba(16,185,129,0.3)] group-hover:bg-emerald-400 transition-colors">
@@ -45,28 +50,20 @@ export default function Navbar() {
           </Link>
         </div>
 
+        {/* CENTER — Navigation */}
         <div className="hidden md:flex items-center gap-8">
           {navItem("/", "Home")}
           {navItem("/dashboard", "Dashboard")}
           {navItem("/leaderboard", "Leaderboard")}
-          {isAdmin(address) && navItem("/admin", "Admin")}
+          {address && navItem("/badges", "Badges")}
+
+          {/* Admin link (safe) */}
+          {address && isAdmin(address) && navItem("/admin", "Admin")}
         </div>
 
+        {/* RIGHT — Wallet */}
         <div className="flex items-center gap-4">
-          {/* {isConnected && data && data.totalXP > 0 && (
-            <div className="hidden sm:flex items-center gap-2 rounded-full border border-emerald-500/20 bg-emerald-500/5 px-3 py-1 text-xs font-bold text-emerald-400">
-              <span className="animate-pulse">⚡</span>
-              {data.totalXP.toLocaleString()} XP
-            </div>
-          )} */}
-
-          <div className="rainbow-custom-connect">
-            <ConnectButton
-              showBalance={false}
-              chainStatus="icon"
-              //   accountStatus="address"
-            />
-          </div>
+          <ConnectButton showBalance={false} chainStatus="icon" />
         </div>
       </div>
     </nav>

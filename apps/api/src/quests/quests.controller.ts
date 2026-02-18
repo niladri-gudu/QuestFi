@@ -36,9 +36,4 @@ export class QuestsController {
   ) {
     return this.questsService.submitQuest(id, body);
   }
-
-//   @Post('verify/:completionId')
-//   async verifyQuest(@Param('completionId') completionId: string) {
-//     return this.questsService.verifyQuest(completionId);
-//   }
 }

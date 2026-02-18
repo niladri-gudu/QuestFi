@@ -1,7 +1,7 @@
 "use client";
 
 import { useLeaderboard } from "../../hooks/useLeaderboard";
-import { useAccount } from "wagmi";
+import { useConnection } from "wagmi";
 import { useState } from "react";
 
 function shorten(address: string) {
@@ -9,7 +9,7 @@ function shorten(address: string) {
 }
 
 export default function LeaderboardTable() {
-  const { address } = useAccount();
+  const { address } = useConnection();
   const [page, setPage] = useState(1);
   const { data, isLoading, error } = useLeaderboard(page, 10);
 

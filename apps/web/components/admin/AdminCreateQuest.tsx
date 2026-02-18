@@ -63,7 +63,6 @@ export default function AdminCreateQuest() {
         </div>
 
         <div className="space-y-6">
-          {/* TYPE SELECT */}
           <div>
             <label className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500 ml-1">Logic Type</label>
             <select

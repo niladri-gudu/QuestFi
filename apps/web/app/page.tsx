@@ -19,13 +19,12 @@ export default function LandingPage() {
   );
 }
 
-// ---------------- HERO ----------------
 function Hero() {
   const demoXP = 1200;
   const level = Math.floor(demoXP / 500) + 1;
 
   return (
-    <section className="relative mx-auto max-w-6xl overflow-hidden rounded-[2.5rem] border border-zinc-800 bg-gradient-to-br from-zinc-900 to-zinc-950 p-10 md:p-16">
+    <section className="relative mx-auto max-w-6xl overflow-hidden rounded-[2.5rem] border border-zinc-800 bg-linear-to-br from-zinc-900 to-zinc-950 p-10 md:p-16">
       <Glow />
 
       <div className="relative z-10 grid gap-12 md:grid-cols-2 md:items-center">
@@ -34,7 +33,7 @@ function Hero() {
 
           <h1 className="mt-6 text-5xl font-extrabold leading-[1.1] text-white md:text-6xl">
             Level up your
-            <span className="block bg-linear-to-r from-emerald-400 to-violet-400 bg-clip-text text-transparent">
+            <span className="block text-emerald-400">
               Web3 journey
             </span>
           </h1>
@@ -97,7 +96,7 @@ function Stats() {
 function HeroCard({ xp, level }: { xp: number; level: number }) {
   return (
     <div className="relative">
-      <div className="absolute -inset-1 rounded-[2rem] bg-gradient-to-r from-emerald-500/20 to-violet-500/20 blur-2xl opacity-50" />
+      <div className="absolute -inset-1 rounded-[2rem] bg-linear-to-r from-emerald-500/20 to-violet-500/20 blur-2xl opacity-50" />
       <div className="relative rounded-[2rem] border border-zinc-800 bg-zinc-900/90 p-8 shadow-2xl backdrop-blur-sm">
         <div className="flex items-center justify-between">
           <div>
@@ -138,7 +137,6 @@ function QuestRow({ title, xp, done }: any) {
   );
 }
 
-// ---------------- FEATURES ----------------
 function Features() {
   const features = [
     {
@@ -183,7 +181,6 @@ function Features() {
   );
 }
 
-// ---------------- HOW IT WORKS ----------------
 function HowItWorks() {
   const steps = [
     "Connect your wallet",
@@ -213,7 +210,6 @@ function HowItWorks() {
   );
 }
 
-// ---------------- SOCIAL PROOF ----------------
 function SocialProof() {
   return (
     <section className="text-center space-y-6">
@@ -229,7 +225,6 @@ function SocialProof() {
   );
 }
 
-// ---------------- CTA ----------------
 function CTA() {
   return (
     <section className="rounded-[2.5rem] border border-zinc-800 bg-linear-to-r from-emerald-500/5 via-violet-500/5 to-emerald-500/5 p-16 text-center">
@@ -250,7 +245,6 @@ function CTA() {
   );
 }
 
-// ---------------- FOOTER ----------------
 function Footer() {
   return (
     <footer className="pt-10 text-center text-xs font-medium tracking-widest text-zinc-600 uppercase">
@@ -259,7 +253,6 @@ function Footer() {
   );
 }
 
-// ---------------- REUSABLE ----------------
 function SectionHeader({ title, subtitle }: any) {
   return (
     <div className="text-center">
