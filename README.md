@@ -1,58 +1,148 @@
-# Turborepo Tailwind CSS starter
+# QuestFi 🎯
 
-This Turborepo starter is maintained by the Turborepo core team.
+> **Web3 questing made Web2-simple.** Complete quests, earn XP, climb leaderboards, and collect NFT/SBT badges — all in a few clicks.
 
-## Using this example
+🔴 **Live App** → [questfi.niladri.app](https://questfi.niladri.app)  
+💻 **Built as Project 1/6 of my [6 Projects in 60 Days](https://twitter.com/dev_niladri) challenge**
 
-Run the following command:
+---
 
-```sh
-npx create-turbo@latest -e with-tailwind
+## What is QuestFi?
+
+QuestFi is a Web3 dApp that makes onchain interactions feel native and intuitive. The idea is simple: connect your wallet, pick a quest, complete it, earn XP, and mint a badge. No jargon, no friction — just progress you can see.
+
+Under the hood, it's a production-grade fullstack application that proves Web3 dApps still need real backends.
+
+---
+
+## Features
+
+- **Quest System** — Browse and complete onchain quests
+- **XP & Leveling** — Earn experience points tracked off-chain with full consistency
+- **Leaderboard** — Compete with other users in real time
+- **NFT/SBT Badges** — Mint soulbound or transferable badge rewards on quest completion
+- **Web3 Auth** — Wallet-based authentication via RainbowKit
+- **Event-driven Architecture** — Blockchain events trigger backend jobs via BullMQ queues
+
+---
+
+## Tech Stack
+
+### Monorepo
+- **[Turborepo](https://turbo.build/)** — Monorepo build system
+
+### Frontend (`apps/web`)
+- **[Next.js](https://nextjs.org/)** — React framework
+- **[RainbowKit](https://www.rainbowkit.com/)** — Wallet connection UI
+- **[Wagmi](https://wagmi.sh/)** — React hooks for Ethereum
+- **[Viem](https://viem.sh/)** — TypeScript Ethereum library
+
+### Backend (`apps/api`)
+- **[NestJS](https://nestjs.com/)** — Modular Node.js framework
+- **[Prisma](https://www.prisma.io/)** — Type-safe ORM
+- **[BullMQ](https://bullmq.io/)** — Queue system for async jobs
+- **[Redis](https://redis.io/)** — Queue broker + caching
+
+### Infrastructure
+- **[AWS EC2](https://aws.amazon.com/ec2/)** — Backend hosting (nginx + PM2)
+- **[Vercel](https://vercel.com/)** — Frontend hosting
+
+---
+
+## Architecture
+
+```
+QuestFi/
+├── apps/
+│   ├── web/          # Next.js frontend
+│   └── api/          # NestJS backend
+├── packages/
+│   ├── ui/           # Shared UI components
+│   └── config/       # Shared configs (eslint, tsconfig)
+└── turbo.json
 ```
 
-## What's inside?
+The blockchain handles **ownership and trust**. The backend handles everything else — XP logic, leaderboard rankings, quest state tracking, and onchain event listening via BullMQ workers.
 
-This Turborepo includes the following packages/apps:
+---
 
-### Apps and Packages
+## Getting Started
 
-- `docs`: a [Next.js](https://nextjs.org/) app with [Tailwind CSS](https://tailwindcss.com/)
-- `web`: another [Next.js](https://nextjs.org/) app with [Tailwind CSS](https://tailwindcss.com/)
-- `ui`: a stub React component library with [Tailwind CSS](https://tailwindcss.com/) shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+### Prerequisites
+- Node.js 18+
+- pnpm
+- Redis (local or hosted)
+- A wallet (MetaMask, Coinbase Wallet, etc.)
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+### Installation
 
-### Building packages/ui
-
-This example is set up to produce compiled styles for `ui` components into the `dist` directory. The component `.tsx` files are consumed by the Next.js apps directly using `transpilePackages` in `next.config.ts`. This was chosen for several reasons:
-
-- Make sharing one `tailwind.config.ts` to apps and packages as easy as possible.
-- Make package compilation simple by only depending on the Next.js Compiler and `tailwindcss`.
-- Ensure Tailwind classes do not overwrite each other. The `ui` package uses a `ui-` prefix for it's classes.
-- Maintain clear package export boundaries.
-
-Another option is to consume `packages/ui` directly from source without building. If using this option, you will need to update the `tailwind.config.ts` in your apps to be aware of your package locations, so it can find all usages of the `tailwindcss` class names for CSS compilation.
-
-For example, in [tailwind.config.ts](packages/tailwind-config/tailwind.config.ts):
-
-```js
-  content: [
-    // app content
-    `src/**/*.{js,ts,jsx,tsx}`,
-    // include packages if not transpiling
-    "../../packages/ui/*.{js,ts,jsx,tsx}",
-  ],
+```bash
+git clone https://github.com/niladri-gudu/QuestFi.git
+cd QuestFi
+pnpm install
 ```
 
-If you choose this strategy, you can remove the `tailwindcss` and `autoprefixer` dependencies from the `ui` package.
+### Environment Setup
 
-### Utilities
+Create `.env` files in both `apps/web` and `apps/api`. Refer to the `.env.example` files in each directory.
 
-This Turborepo has some additional tools already setup for you:
+```bash
+# apps/api
+DATABASE_URL=
+REDIS_URL=
+RPC_URL=
+PRIVATE_KEY=
 
-- [Tailwind CSS](https://tailwindcss.com/) for styles
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
+# apps/web
+NEXT_PUBLIC_RPC_URL=
+NEXT_PUBLIC_CONTRACT_ADDRESS=
+```
+
+### Run Locally
+
+```bash
+pnpm dev
+```
+
+This starts both the Next.js frontend and NestJS backend in parallel via Turborepo.
+
+---
+
+## Deployment
+
+- **Frontend** — Deployed to Vercel via GitHub integration
+- **Backend** — Deployed to AWS EC2 with nginx as a reverse proxy and PM2 as the process manager
+
+---
+
+## What I Learned
+
+This was Project 1 of my 6 Projects in 60 Days challenge. Key takeaways:
+
+- Web3 dApps **still need real backends** — blockchain is for trust, not application logic
+- Deploying a Node.js server on EC2 from scratch (SSH, nginx, PM2, env management)
+- BullMQ + Redis is a clean solution for handling async blockchain event processing
+- Turborepo makes fullstack monorepo DX genuinely good
+
+---
+
+## Roadmap
+
+- [ ] More quest types (social, onchain activity, protocol interactions)
+- [ ] Guild / team quests
+- [ ] Multi-chain support
+- [ ] Quest creation UI for protocols to publish their own quests
+
+---
+
+## Author
+
+**Niladri** — [@dev_niladri](https://twitter.com/dev_niladri)
+
+Follow along as I go from Web2 → Web3 in real time. 5 more projects to go.
+
+---
+
+## License
+
+MIT
