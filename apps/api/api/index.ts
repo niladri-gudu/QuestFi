@@ -1,18 +1,21 @@
-// apps/api/api/index.ts
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from '../src/app.module.js';
 import { ValidationPipe } from '@nestjs/common/pipes/validation.pipe.js';
 import { ExpressAdapter } from '@nestjs/platform-express';
-import * as express from 'express';
+import express, { Express } from 'express';
 import 'dotenv/config';
+import type { IncomingMessage, ServerResponse } from 'http';
 
-const server = express();
-let app: any;
+const expressApp: Express = express();
+let isBootstrapped = false;
 
 async function bootstrap() {
-  if (app) return server;
+  if (isBootstrapped) return;
 
-  app = await NestFactory.create(AppModule, new ExpressAdapter(server));
+  const app = await NestFactory.create(
+    AppModule,
+    new ExpressAdapter(expressApp),
+  );
 
   app.enableCors({
     origin: process.env.CORS_ORIGIN?.split(',') ?? '*',
@@ -21,10 +24,10 @@ async function bootstrap() {
 
   app.useGlobalPipes(new ValidationPipe());
   await app.init();
-  return server;
+  isBootstrapped = true;
 }
 
-export default async (req: any, res: any) => {
+export default async (req: IncomingMessage, res: ServerResponse) => {
   await bootstrap();
-  server(req, res);
+  expressApp(req, res);
 };
