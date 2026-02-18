@@ -6,18 +6,10 @@ import { IpfsService } from '../ipfs/ipfs.service';
 
 @Module({
   imports: [
-    BullModule.forRoot({
-      connection: {
-        host: 'localhost',
-        port: 6379,
-      },
-    }),
-
     BullModule.registerQueue({
       name: 'badge-mint',
     }),
   ],
   providers: [BadgeProcessor, BlockchainService, IpfsService],
-  exports: [BullModule],
 })
 export class BadgeModule {}

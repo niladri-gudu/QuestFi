@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { Injectable } from '@nestjs/common';
 import axios from 'axios';
+import { timeout } from 'rxjs';
 
 @Injectable()
 export class IpfsService {
@@ -21,10 +22,29 @@ export class IpfsService {
   async fetchJson(metadataHash: string): Promise<any> {
     const cid = metadataHash.replace('ipfs://', '');
 
-    const gatewayUrl = `https://gateway.pinata.cloud/ipfs/${cid}`;
+    const gateways = [
+      'https://ipfs.io/ipfs/',
+      'https://gateway.pinata.cloud/ipfs/',
+    ];
 
-    const response = await axios.get(gatewayUrl);
+    for (const base of gateways) {
+      try {
+        const url = base + cid;
 
-    return response.data;
+        const res = await axios.get(url, {
+          timeout: 5000,
+          headers: {
+            'User-Agent': 'Mozilla/5.0',
+          },
+        });
+
+        return res.data;
+      } catch (err) {
+        console.warn(`IPFS gateway failed: ${base}`);
+        continue;
+      }
+    }
+
+    throw new Error('All IPFS gateways failed');
   }
 }

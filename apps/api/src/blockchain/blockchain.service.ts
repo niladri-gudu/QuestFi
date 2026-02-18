@@ -3,7 +3,12 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { Injectable } from '@nestjs/common';
-import { createWalletClient, createPublicClient, http, verifyMessage } from 'viem';
+import {
+  createWalletClient,
+  createPublicClient,
+  http,
+  verifyMessage,
+} from 'viem';
 import { privateKeyToAccount } from 'viem/accounts';
 import { sepolia } from 'viem/chains';
 import { decodeEventLog } from 'viem';

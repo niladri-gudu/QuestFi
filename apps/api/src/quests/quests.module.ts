@@ -6,6 +6,9 @@ import { IpfsModule } from '../ipfs/ipfs.module';
 import { BlockchainModule } from '../blockchain/blockchain.module';
 import { BullModule } from '@nestjs/bullmq';
 import { BadgeModule } from 'src/badge/badge.module';
+import { QuestProcessor } from './quests.processor';
+import { QuestSyncProcessor } from './quest-sync.processor';
+import { QuestSyncScheduler } from './quest-sync.scheduler';
 
 @Module({
   imports: [
@@ -14,8 +17,15 @@ import { BadgeModule } from 'src/badge/badge.module';
     BlockchainModule,
     BadgeModule,
     BullModule.registerQueue({ name: 'badge-mint' }),
+    BullModule.registerQueue({ name: 'quest-create' }),
+    BullModule.registerQueue({ name: 'quest-sync' }),
   ],
-  providers: [QuestsService],
+  providers: [
+    QuestsService,
+    QuestProcessor,
+    QuestSyncProcessor,
+    QuestSyncScheduler,
+  ],
   controllers: [QuestsController],
 })
 export class QuestsModule {}
