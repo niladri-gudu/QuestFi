@@ -25,12 +25,12 @@ export class QuestSyncScheduler implements OnModuleInit {
       {},
       {
         repeat: {
-          every: 10 * 60 * 1000,
+          every: 24 * 60 * 60 * 1000,
         },
         removeOnComplete: true,
       },
     );
 
-    console.log('⏱ Quest sync cron scheduled (every 10 min)');
+    console.log('⏱ Quest sync cron scheduled (every 24 hours)');
   }
 }
