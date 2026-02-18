@@ -23,8 +23,11 @@ export class IpfsService {
     const cid = metadataHash.replace('ipfs://', '');
 
     const gateways = [
+      'https://cloudflare-ipfs.com/ipfs/',
       'https://ipfs.io/ipfs/',
+      'https://dweb.link/ipfs/',
       'https://gateway.pinata.cloud/ipfs/',
+      'https://ipfs.fleek.co/ipfs/',
     ];
 
     for (const base of gateways) {
