@@ -24,8 +24,6 @@ export function useSubmitQuest() {
   const submitQuest = async (questId: string, metadata: Metadata) => {
     if (!address) throw new Error("Wallet not connected");
 
-    const toastId = toast.loading("Sending transaction...");
-
     if (
       !metadata?.message &&
       !(metadata?.contractAddress && metadata?.minValue)
@@ -33,8 +31,12 @@ export function useSubmitQuest() {
       throw new Error("Invalid quest metadata");
     }
 
+    let toastId: string | number | undefined;
+
     try {
       setLoading(true);
+
+      toastId = toast.loading("Starting quest...");
 
       let txHash: string | undefined;
       let signature: string | undefined;
@@ -51,7 +53,7 @@ export function useSubmitQuest() {
 
         toast.loading("Waiting for confirmation ⛏️", { id: toastId });
 
-        await publicClient.waitForTransactionReceipt({ hash: txHash });
+        await publicClient.waitForTransactionReceipt({ hash: txHash as `0x${string}` });
       }
 
       if (metadata.message) {

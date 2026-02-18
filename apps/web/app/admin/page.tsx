@@ -1,12 +1,12 @@
 "use client";
 
-import { useAccount } from "wagmi";
+import { useConnection } from "wagmi";
 import { isAdmin } from "../../lib/admin";
 import AdminCreateQuest from "../../components/admin/AdminCreateQuest";
 import { Settings, ShieldAlert, Lock } from "lucide-react";
 
 export default function AdminPage() {
-  const { address, isConnected } = useAccount();
+  const { address, isConnected } = useConnection();
 
   if (!isConnected) {
     return (
@@ -41,7 +41,6 @@ export default function AdminPage() {
 function Header() {
   return (
     <header className="relative overflow-hidden rounded-[2rem] border border-zinc-800 bg-zinc-950 p-8">
-      {/* Background technical grid or glow */}
       <div className="pointer-events-none absolute -right-10 -top-10 h-32 w-32 rounded-full bg-emerald-500/5 blur-3xl" />
       
       <div className="relative z-10 flex items-center gap-6">

@@ -3,7 +3,7 @@
 import { useSubmitQuest } from "../hooks/useSubmitQuest";
 import { useState } from "react";
 import { toast } from "sonner";
-import { useAccount } from "wagmi";
+import { useConnection } from "wagmi";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 import { useQueryClient } from "@tanstack/react-query";
 import { Loader2, Zap } from "lucide-react";
@@ -16,13 +16,12 @@ export default function CompleteButton({
   metadata: any;
 }) {
   const { submitQuest, loading } = useSubmitQuest();
-  const { isConnected } = useAccount();
+  const { isConnected } = useConnection();
   const { openConnectModal } = useConnectModal();
   const [done, setDone] = useState(false);
   const queryClient = useQueryClient();
 
   const handleClick = async (e: React.MouseEvent) => {
-    // Prevent event bubbling if necessary
     e.preventDefault();
     
     if (!isConnected) {

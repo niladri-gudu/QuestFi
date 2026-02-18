@@ -5,7 +5,6 @@ export default function LeaderboardPage() {
   return (
     <div className="mx-auto max-w-4xl space-y-8 py-10">
       <header className="relative overflow-hidden rounded-[2rem] border border-zinc-800 bg-zinc-900/50 p-8 text-center">
-        {/* Subtle background glow */}
         <div className="pointer-events-none absolute -left-10 -top-10 h-32 w-32 rounded-full bg-violet-500/10 blur-3xl" />
         
         <div className="relative z-10 flex flex-col items-center">

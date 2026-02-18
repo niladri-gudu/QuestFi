@@ -22,37 +22,26 @@ export class QuestsService {
 
     @InjectQueue('badge-mint')
     private badgeQueue: Queue,
+
+    @InjectQueue('quest-create')
+    private questCreateQueue: Queue,
   ) {}
 
   async createQuest(data: CreateQuestDto) {
-    const cid = await this.ipfsService.uploadJson(data.metadata);
-    const metadataHash = `ipfs://${cid}`;
-
-    const endTime = Math.floor(Date.now() / 1000) + 7 * 24 * 60 * 60;
-
-    const questTypemap = {
-      TX: 0,
-      SIGN: 1,
-      MULTI: 2,
-    };
-
-    const questId = await this.blockchainService.createQuestOnChain(
-      metadataHash,
-      questTypemap[data.type],
-      endTime,
+    const job = await this.questCreateQueue.add(
+      'create-quest',
+      { data },
+      {
+        attempts: 5,
+        backoff: { type: 'exponential', delay: 2000 },
+        removeOnComplete: true,
+      },
     );
 
-    return this.prisma.quest.create({
-      data: {
-        id: questId,
-        title: data.title,
-        description: data.description,
-        type: data.type,
-        xpReward: data.xpReward,
-        metadataHash,
-        isActive: true,
-      },
-    });
+    return {
+      message: 'Quest creation started',
+      jobId: job.id,
+    };
   }
 
   async getActiveQuests(wallet?: string) {
