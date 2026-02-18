@@ -29,5 +29,5 @@ async function bootstrap() {
 
 export default async (req: IncomingMessage, res: ServerResponse) => {
   await bootstrap();
-  expressApp(req, res);
+  (expressApp as any)(req, res);
 };
