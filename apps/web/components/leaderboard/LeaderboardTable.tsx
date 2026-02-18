@@ -9,7 +9,7 @@ function shorten(address: string) {
 }
 
 export default function LeaderboardTable() {
-  const { address } = useConnection();
+  const { address } = useConnection(); // Consistent with previous update
   const [page, setPage] = useState(1);
   const { data, isLoading, error } = useLeaderboard(page, 10);
 
@@ -23,10 +23,10 @@ export default function LeaderboardTable() {
       <div className="overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-950/50 backdrop-blur-sm">
         <table className="w-full text-left">
           <thead>
-            <tr className="border-b border-zinc-800 bg-zinc-900/50 text-[10px] font-black uppercase tracking-widest text-zinc-500">
-              <th className="px-6 py-4">Rank</th>
-              <th className="px-6 py-4">Explorer</th>
-              <th className="px-6 py-4 text-right">Reputation</th>
+            <tr className="border-b border-zinc-800 bg-zinc-900/50 text-[9px] md:text-[10px] font-black uppercase tracking-widest text-zinc-500">
+              <th className="px-3 md:px-6 py-4">Rank</th>
+              <th className="px-3 md:px-6 py-4">Explorer</th>
+              <th className="px-3 md:px-6 py-4 text-right">Reputation</th>
             </tr>
           </thead>
 
@@ -38,33 +38,33 @@ export default function LeaderboardTable() {
                 <tr
                   key={user.wallet}
                   className={`group transition-colors ${
-                    isYou ? "bg-emerald-500/[0.03]" : "hover:bg-zinc-900/40"
+                    isYou ? "bg-emerald-500/[0.05]" : "hover:bg-zinc-900/40"
                   }`}
                 >
-                  <td className="px-6 py-4">
-                    <div className="flex items-center gap-3">
-                      <span className="text-lg">{getMedal(user.rank)}</span>
-                      <span className="font-mono text-xs font-bold text-zinc-400">#{user.rank}</span>
+                  <td className="px-3 md:px-6 py-4">
+                    <div className="flex items-center gap-2 md:gap-3">
+                      <span className="text-base hidden sm:inline">{getMedal(user.rank)}</span>
+                      <span className="font-mono text-[11px] md:text-xs font-bold text-zinc-400">#{user.rank}</span>
                     </div>
                   </td>
 
-                  <td className="px-6 py-4">
-                    <div className="flex items-center gap-3">
-                      <span className={`font-mono text-sm ${isYou ? "text-emerald-400" : "text-zinc-300"}`}>
+                  <td className="px-3 md:px-6 py-4">
+                    <div className="flex items-center gap-2">
+                      <span className={`font-mono text-xs md:text-sm ${isYou ? "text-emerald-400 font-bold" : "text-zinc-300"}`}>
                         {shorten(user.wallet)}
                       </span>
                       {isYou && (
-                        <span className="rounded-full bg-emerald-500/10 px-2 py-0.5 text-[8px] font-black uppercase tracking-tighter text-emerald-400 border border-emerald-500/20">
+                        <span className="rounded-full bg-emerald-500/10 px-1.5 py-0.5 text-[7px] md:text-[8px] font-black uppercase text-emerald-400 border border-emerald-500/20">
                           You
                         </span>
                       )}
                     </div>
                   </td>
 
-                  <td className="px-6 py-4 text-right">
-                    <div className="inline-flex items-center gap-1.5 font-bold">
-                      <span className="text-white">{user.totalXP.toLocaleString()}</span>
-                      <span className="text-[10px] uppercase text-zinc-600">XP</span>
+                  <td className="px-3 md:px-6 py-4 text-right">
+                    <div className="inline-flex items-center gap-1 font-bold">
+                      <span className="text-xs md:text-base text-white">{user.totalXP.toLocaleString()}</span>
+                      <span className="text-[8px] md:text-[10px] uppercase text-zinc-600">XP</span>
                     </div>
                   </td>
                 </tr>

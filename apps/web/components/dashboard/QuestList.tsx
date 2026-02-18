@@ -26,9 +26,11 @@ export default function QuestList() {
     <section className="space-y-4">
       {active?.length > 0 && (
         <>
-          <h2 className="text-xl font-semibold text-white pt-6">🔥 Active Quests</h2>
+          <h2 className="text-xl font-semibold text-white pt-6">
+            🔥 Active Quests
+          </h2>
 
-          <div className="grid gap-4 md:grid-cols-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {active.map((quest: any) => (
               <QuestCard key={quest.id} quest={quest} completed={false} />
             ))}
