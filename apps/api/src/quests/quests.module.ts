@@ -5,7 +5,7 @@ import { PrismaModule } from '../prisma/prisma.module';
 import { IpfsModule } from '../ipfs/ipfs.module';
 import { BlockchainModule } from '../blockchain/blockchain.module';
 import { BullModule } from '@nestjs/bullmq';
-import { BadgeModule } from 'src/badge/badge.module';
+import { BadgeModule } from '../badge/badge.module';
 import { QuestProcessor } from './quests.processor';
 import { QuestSyncProcessor } from './quest-sync.processor';
 import { QuestSyncScheduler } from './quest-sync.scheduler';
