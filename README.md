@@ -2,7 +2,6 @@
 
 > **Web3 questing made Web2-simple.** Complete quests, earn XP, climb leaderboards, and collect NFT/SBT badges — all in a few clicks.
 
-🔴 **Live App** → [questfi.niladri.app](https://questfi.niladri.app)  
 💻 **Built as Project 1/6 of my [6 Projects in 60 Days](https://twitter.com/dev_niladri) challenge**
 
 ---
